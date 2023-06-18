@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h1>Genre: {{ genre }}</h1>
+<div style="margin-left:20px;margin-top:20px">
+    <h4>Genres</h4>
+<dl>
+{% for genre in genre.genre_set.all %}
+    <dt><a href="{% url 'genre-detail' genre.pk %}">{{ genre }}</a> 
+{% endfor %}
+</dl>
+
+</div>
+{% endblock %}

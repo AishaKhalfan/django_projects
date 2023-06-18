@@ -17,6 +17,7 @@ def index(request):
     # Generate counts of some of the main objects
     num_books = Book.objects.all().count()
     num_instances = BookInstance.objects.all().count()
+    num_genres = Genre.objects.all().count()
 
     # Available books (status = 'a')
     num_instances_available = BookInstance.objects.filter(status__exact='a').count()
@@ -36,6 +37,7 @@ def index(request):
         'num_genres': num_genres,
         'num_books_with_the': num_books_with_the,
         'num_visits': num_visits,
+
     } #context is passed to the template engine to be merged with the template file to generate the HTML that is presented to the user.
 
     # Render the HTML template index.html with the data in the context variable
@@ -184,4 +186,54 @@ class BookUpdate( PermissionRequiredMixin, UpdateView):
 class BookDelete(PermissionRequiredMixin, DeleteView):
     model = Book
     success_url = reverse_lazy('books')
+    permission_required = 'catalog.can_mark_returned'
+
+from catalog.models import Genre
+
+class GenreDetailView(generic.DetailView):
+    """Generic class-based detail view for a genre."""
+    model = Genre
+    def genre_detail_view(request, primary_key):
+        try:
+            genre = Genre.objects.get(pk=primary_key)
+        except Genre.DoesNotExist:
+            raise Http404('Genre does not exist')
+
+        return render(request, 'catalog/genre_detail.html', context={'genre': genre})
+
+class GenreListView(generic.ListView):
+    """Generic class-based view for a list of genres"""
+    model = Genre
+    context_object_name = 'genre_list'   # your own name for the list as a template variable
+    #queryset = Book.objects.filter(title__icontains='The')[:5] # Get 5 books containing the title The
+    template_name = 'catalog/genre_list.html'  # Specify your own template name/location
+    paginate_by = 5
+
+    def get_queryset(set):
+        #return Genre.objects.filter(name__icontains='')[:10]
+        #return Genre.objects.filter(name__iregex=r'^[A-Z]')
+        return Genre.objects.all()
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get the context
+        context = super(GenreListView, self).get_context_data(**kwargs)
+        #context['some_data'] = 'This is just some data'
+        genre = Genre.objects.all()
+        context['genre'] = genre
+        return context
+
+class GenreCreate(PermissionRequiredMixin,CreateView):
+    model = Genre
+    fields = '__all__'
+    #initial = {'date_of_death': '11/06/2020'}
+    permission_required = 'catalog.can_mark_returned'
+
+class GenreUpdate( PermissionRequiredMixin, UpdateView):
+    model = Genre
+    fields = '__all__' # Not recommended (potential security issue if more fields added)
+    permission_required = 'catalog.can_mark_returned'
+
+class GenreDelete(PermissionRequiredMixin, DeleteView):
+    model = Genre
+    success_url = reverse_lazy('genres')
     permission_required = 'catalog.can_mark_returned'

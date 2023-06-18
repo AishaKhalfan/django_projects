@@ -13,6 +13,11 @@ class Genre(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return self.name
+    
+    def get_absolute_url(self):
+        """Returns the url to access a genre."""
+        #return reverse('genres', args=[str(self.name)])
+        return reverse('genres', args=[str(self.id)])
 
 class Book(models.Model):
     """Model representing a book (but not a specific copy of a book)."""
