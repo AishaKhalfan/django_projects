@@ -81,7 +81,8 @@ class AuthorListView(generic.ListView):
     """Generic class-based list view for a list of authors."""
     model = Author
     template_name = 'catalog/author_list.html'
-    paginate_by = 5
+    #paginate_by = 5
+    paginate_by = 10 #for the unittests
 
 from django.contrib.auth.views import PasswordResetView
 
