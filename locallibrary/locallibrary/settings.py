@@ -145,7 +145,7 @@ LOGIN_REDIRECT_URL = '/'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # ADDED THE FOLOWING AFTER RUNNING python3 manage.py check --deploy
-"""SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 SECURE_SSL_REDIRECT = True
@@ -164,4 +164,4 @@ DATABASES['default'].update(db_from_env)
 # http://whitenoise.evans.io/en/stable/django.html#django-middleware
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'"""
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
